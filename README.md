@@ -1,7 +1,7 @@
-# Quant Trading
+# Monster Quant
 
-A small Python quant-trading playground with a moving-average crossover strategy,
-a deterministic CSV backtest engine, and tests.
+A-share emotion and capital-flow quant platform for main-theme, leader-stock,
+second-wave, auction-above-expectation, hot-money, and risk-cycle research.
 
 ## Quick Start
 
@@ -15,9 +15,43 @@ python -m pytest
 
 ## What Is Included
 
-- CSV price loading with typed bars
-- Moving-average crossover signal generation
-- Long-only backtest engine
-- Return, drawdown, and Sharpe metrics
-- CLI entry point and sample data
+- FastAPI backend
+- PostgreSQL and Redis Docker Compose
+- SQLAlchemy database models
+- Collector adapter interfaces for akshare, pytdx, and tushare
+- Theme ranking, emotion cycle, MonsterScore, TOP10 pool
+- Risk engine and daily Markdown review
+- Minimal Vue/ECharts frontend shell
+- Legacy CSV backtest sandbox kept under `quant_trading`
 
+## Backend
+
+```powershell
+pip install -e .[dev]
+$env:DATA_PROVIDER = "akshare"
+uvicorn monster_quant.api.app:create_app --factory --reload
+```
+
+Use `DATA_PROVIDER=mock` when you want a deterministic offline demo.
+
+## CLI Review
+
+```powershell
+monster-quant
+```
+
+## Docker Services
+
+```powershell
+docker compose -f docker/docker-compose.yml up -d
+```
+
+## Real Data
+
+The default real-data adapter is `akshare`. It currently builds the phase-one
+snapshot from public A-share endpoints and converts them into Monster Quant
+signals:
+
+- limit-up pool and emotion breadth
+- concept/theme heat
+- stock candidates with capital, emotion, pattern, chip, and auction fields

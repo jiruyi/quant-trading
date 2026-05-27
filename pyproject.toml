@@ -9,8 +9,10 @@ description = "Monster Quant: an A-share emotion and capital-flow research platf
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "akshare>=1.14",
     "apscheduler>=3.10",
     "fastapi>=0.111",
+    "psycopg[binary]>=3.2",
     "pydantic>=2.7",
     "sqlalchemy>=2.0",
     "uvicorn[standard]>=0.30",

@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
-from monster_quant.crawler.mock import load_mock_snapshot
+from monster_quant.crawler import get_provider
 from monster_quant.emotion import classify_emotion, position_limit
 from monster_quant.factor import rank_themes, top_monsters
 from monster_quant.reporting import build_daily_review
+from monster_quant.service import market_dashboard
 
 
 def create_app() -> FastAPI:
@@ -15,9 +16,13 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
+    @app.get("/api/dashboard")
+    def dashboard() -> dict[str, object]:
+        return market_dashboard()
+
     @app.get("/market/emotion")
     def market_emotion() -> dict[str, object]:
-        snapshot = load_mock_snapshot()
+        snapshot = get_provider().snapshot()
         stage = classify_emotion(snapshot)
         return {
             "trade_date": snapshot.trade_date.isoformat(),
@@ -31,7 +36,7 @@ def create_app() -> FastAPI:
 
     @app.get("/themes/top")
     def themes_top() -> list[dict[str, object]]:
-        snapshot = load_mock_snapshot()
+        snapshot = get_provider().snapshot()
         return [
             {
                 "name": item.name,
@@ -46,13 +51,13 @@ def create_app() -> FastAPI:
 
     @app.get("/monster/top")
     def monster_top(limit: int = 10) -> list[dict[str, object]]:
-        snapshot = load_mock_snapshot()
+        snapshot = get_provider().snapshot()
         themes = rank_themes(snapshot.theme_signals)
         return [monster.__dict__ for monster in top_monsters(snapshot.stock_signals, themes, limit=limit)]
 
     @app.get("/review/daily", response_model=str)
     def daily_review() -> str:
-        snapshot = load_mock_snapshot()
+        snapshot = get_provider().snapshot()
         stage = classify_emotion(snapshot)
         themes = rank_themes(snapshot.theme_signals)
         monsters = top_monsters(snapshot.stock_signals, themes)

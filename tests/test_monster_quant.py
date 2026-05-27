@@ -1,4 +1,5 @@
 from monster_quant.crawler.mock import load_mock_snapshot
+from monster_quant.crawler.akshare_provider import normalize_code, normalize_money
 from monster_quant.emotion import EmotionStage, classify_emotion
 from monster_quant.factor import is_auction_above_expectation, rank_themes, top_monsters
 from monster_quant.reporting import build_daily_review
@@ -31,3 +32,8 @@ def test_auction_above_expectation_rule() -> None:
     stock = load_mock_snapshot().stock_signals[0]
 
     assert is_auction_above_expectation(stock)
+
+
+def test_akshare_helpers_normalize_values() -> None:
+    assert normalize_code("1") == "000001"
+    assert normalize_money(250_000_000) == 2.5
