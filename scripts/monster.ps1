@@ -44,12 +44,25 @@ switch ($Action) {
 
     "frontend" {
         Invoke-Step "Installing frontend dependencies if needed" {
-            if (-not (Test-Path "frontend\node_modules")) {
-                npm install --prefix frontend
+            if (-not (Test-Path ".npm-cache")) {
+                New-Item -ItemType Directory -Path ".npm-cache" | Out-Null
+            }
+            Push-Location "frontend"
+            try {
+                if (-not (Test-Path "node_modules")) {
+                    npm install --cache (Join-Path $Root ".npm-cache")
+                }
+            } finally {
+                Pop-Location
             }
         }
         Invoke-Step "Starting frontend at http://127.0.0.1:5173" {
-            npm run dev --prefix frontend
+            Push-Location "frontend"
+            try {
+                npm run dev -- --host 127.0.0.1
+            } finally {
+                Pop-Location
+            }
         }
     }
 
