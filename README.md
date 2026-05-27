@@ -6,11 +6,9 @@ second-wave, auction-above-expectation, hot-money, and risk-cycle research.
 ## Quick Start
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -e .[dev]
-python -m quant_trading --prices data/sample_prices.csv --short-window 5 --long-window 20
-python -m pytest
+.\scripts\monster.cmd setup
+.\scripts\monster.cmd cli -Provider mock
+.\scripts\monster.cmd api -Provider akshare
 ```
 
 ## What Is Included
@@ -37,13 +35,25 @@ Use `DATA_PROVIDER=mock` when you want a deterministic offline demo.
 ## CLI Review
 
 ```powershell
-monster-quant
+.\scripts\monster.cmd cli -Provider akshare
 ```
 
 ## Docker Services
 
 ```powershell
 docker compose -f docker/docker-compose.yml up -d
+```
+
+Or:
+
+```powershell
+.\scripts\monster.cmd docker
+```
+
+## Push Helper
+
+```powershell
+.\scripts\push.cmd -Message "Update Monster Quant"
 ```
 
 ## Real Data
