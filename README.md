@@ -11,6 +11,24 @@ second-wave, auction-above-expectation, hot-money, and risk-cycle research.
 .\scripts\monster.cmd api -Provider akshare
 ```
 
+Frontend:
+
+```powershell
+.\scripts\monster.cmd frontend
+```
+
+Open:
+
+```text
+http://127.0.0.1:5173
+```
+
+For the frontend to show data, keep the API running in another terminal:
+
+```powershell
+.\scripts\monster.cmd api -Provider mock
+```
+
 ## What Is Included
 
 - FastAPI backend

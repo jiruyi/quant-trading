@@ -1,5 +1,5 @@
 param(
-    [ValidateSet("setup", "cli", "api", "docker", "status")]
+    [ValidateSet("setup", "cli", "api", "frontend", "docker", "status")]
     [string]$Action = "cli",
 
     [ValidateSet("mock", "akshare")]
@@ -39,6 +39,17 @@ switch ($Action) {
         $env:DATA_PROVIDER = $Provider
         Invoke-Step "Starting API at http://127.0.0.1:8000 with DATA_PROVIDER=$Provider" {
             uvicorn monster_quant.api.app:create_app --factory --reload
+        }
+    }
+
+    "frontend" {
+        Invoke-Step "Installing frontend dependencies if needed" {
+            if (-not (Test-Path "frontend\node_modules")) {
+                npm install --prefix frontend
+            }
+        }
+        Invoke-Step "Starting frontend at http://127.0.0.1:5173" {
+            npm run dev --prefix frontend
         }
     }
 
